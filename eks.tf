@@ -13,16 +13,15 @@ resource "aws_eks_cluster" "cluster" {
 #  there is no direct option in a node group to encrypt ebs volume
 
 resource "aws_launch_template" "eks_nodes-lt" {
-  name_prefix   = "${var.env}-lt"
+  name   = "${var.env}-node-lt"
   block_device_mappings {
     device_name = "/dev/xvda"
 
     ebs {
       volume_size           = 20
-      volume_type           = "gp3"
       encrypted             = true
       kms_key_id            = var.kms
-      delete_on_termination = true
+
     }
   }
    tag_specifications {
@@ -43,7 +42,7 @@ resource "aws_eks_node_group" "eks-node" {
 
 #   capacity_type = "SPOT" terminating automatically and recreating a new instance
    launch_template {
-     id = aws_launch_template.eks_nodes-lt.id
+     name = aws_launch_template.eks_nodes-lt.name
      version = "$Latest"
    }
   scaling_config {
