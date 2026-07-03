@@ -24,5 +24,5 @@ resource "helm_release" "nginx-ingress" {
 # * controller.podAnnotations.prometheus\\.io/port=10254
 # * controller.podAnnotations.prometheus\\.op/scrape=true
 
- latest version for nginx ingress controller : oci://ghcr.io/nginxinc/charts/nginx-ingress
-chartName: nginx-ingress
+#  latest version for nginx ingress controller : oci://ghcr.io/nginxinc/charts/nginx-ingress
+# chartName: nginx-ingress
