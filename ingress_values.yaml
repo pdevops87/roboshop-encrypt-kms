@@ -16,14 +16,31 @@
 
 controller:
   service:
+    # 1. FIXED: Reset these to default NGINX container target ports
     httpPort:
-      targetPort: 80
+      targetPort: http
     httpsPort:
-      targetPort: 80
+      targetPort: http # Tells NLB to send decrypted HTTPS traffic to NGINX's HTTP port
+
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:041445559784:certificate/cd81e3b4-95e7-44dc-b496-b88a8acabd93
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:041445559784:certificate/cd81e3b4-95e7-44dc-b496-b88a8acabd93"
       service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
 
+      # --- CRITICAL MISSING ANNOTATION 1 ---
+      # Tells AWS to ONLY apply the ACM SSL certificate to port 443 (HTTPS)
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+
+      # --- CRITICAL MISSING ANNOTATION 2 ---
+      # Tells AWS to pass the traffic as standard HTTP downstream after decrypting it
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+
+  # --- CRITICAL CONFIGMAP ADDITIONS ---
+  # This goes inside the NGINX controller block to handle headers properly
+  config:
+    # Crucial: Tells NGINX to trust the AWS NLB proxy headers (prevents redirect loops)
+    use-forwarded-headers: "true"
+    # Optional: Automatically upgrades HTTP users to HTTPS globally at the load balancer level
+    ssl-redirect: "true"
 
 #

@@ -19,6 +19,22 @@ resource "helm_release" "argocd" {
     {
       name  = "configs.params.server\\.insecure"
       value = true
+    },
+    {
+      name  = "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/backend-protocol"
+      value = "HTTP"
+    },
+    {
+      name  = "server.ingress.hosts[0]"
+      value = "argocd-${var.env}.pdevops87.online"
+    },
+    {
+      name  = "server.ingress.paths[0]"
+      value = "/"
+    },
+    {
+      name  = "server.ingress.ports.http"
+      value = "80"
     }
   ]
 }
