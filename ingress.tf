@@ -18,6 +18,10 @@ resource "helm_release" "nginx-ingress" {
     {
       name  = "controller.podAnnotations.prometheus\\.io/scrape"
       value = true
+    },
+    {
+      name  = "controller.service.type"
+      value = "LoadBalancer"
     }
   ]
 
