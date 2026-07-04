@@ -2,8 +2,8 @@ resource "helm_release" "nginx-ingress" {
 
   depends_on = [null_resource.kube-config]
   name       = "nginx-ingress"
-  repository = "oci://ghcr.io/nginxinc/charts"
-  chart      = "nginx-ingress"
+  chart      = "oci://ghcr.io/nginx/charts/nginx-ingress"
+    version    = "2.6.1"
   values     = [file("ingress_values.yaml")]
 
   set = [
