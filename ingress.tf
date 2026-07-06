@@ -1,30 +1,23 @@
 resource "helm_release" "nginx-ingress" {
-
   depends_on = [null_resource.kube-config]
   name       = "nginx-ingress"
-  chart      = "oci://ghcr.io/nginx/charts/nginx-ingress"
-    version    = "2.6.1"
-  values     = [file("ingress_values.yaml")]
-
-  set = [
-    {
-      name  = "controller.metrics.enabled"
-      value = true
-    },
-    {
-      name  = "controller.podAnnotations.prometheus\\.io/port"
-      value = 10254
-    },
-    {
-      name  = "controller.podAnnotations.prometheus\\.io/scrape"
-      value = true
-    },
-    {
-      name  = "controller.service.type"
-      value = "LoadBalancer"
-    }
-  ]
-
+  repository = "https://helm.nginx.com/stable"
+  chart      = "nginx-ingress"
+  values = [file("ingress_values.yaml")]
+#   set = [
+#     {
+#       name = "controller.metrics.enabled"
+#       value = true
+#     },
+#     {
+#       name = "controller.podAnnotations.prometheus\\.io/port"
+#       value = 10254
+#     },
+#     {
+#       name = "controller.podAnnotations.prometheus\\.io/scrape"
+#       value = true
+#     }
+#   ]
 }
 
 

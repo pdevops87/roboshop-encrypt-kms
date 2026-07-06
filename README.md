@@ -18,3 +18,8 @@
 │
 ▼
 [ Argo CD Pod (HTTP) ]       ◄─── Receives clean traffic
+
+
+
+
+kubectl rollout restart deployment ingress-nginx-controller -n ingress-nginx
